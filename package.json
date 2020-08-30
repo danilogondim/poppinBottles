@@ -1,0 +1,24 @@
+{
+  "name": "poppinBottles",
+  "version": "1.0.0",
+  "description": "",
+  "main": "poppinBottles.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danilogondim/poppinBottles.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danilogondim/poppinBottles/issues"
+  },
+  "homepage": "https://github.com/danilogondim/poppinBottles#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3"
+  }
+}
