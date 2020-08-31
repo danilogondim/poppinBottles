@@ -1,42 +1,48 @@
-// For every two empty bottles, you can get one free (full) bottle of pop
-// For every four bottle caps, you can get one free (full) bottle of pop
-// Each bottle of pop costs $2 to purchase
-// 102 min so far
+// 120 min so far
 
-const totalBottles = investment => {
-  const purchasedBottles = investment >= 2 ? Math.floor(investment / 2) : 0;
-  const freeBottlesVsCaps = capsForBottles(purchasedBottles);
-  const freeBottlesVsBottles = bottlesForBottles(purchasedBottles)
-  const totalBottles = purchasedBottles + freeBottlesVsCaps + freeBottlesVsBottles
-  console.log({ purchasedBottles, freeBottlesVsCaps, freeBottlesVsBottles, totalBottles })
-  return totalBottles;
+// a function to call every time we have spare caps to trade for a new bottle;
+const capsForBottles = obj => {
+  obj.totalBottles += Math.floor(obj.capsLeft / 4);
+  obj.emptyBottles += Math.floor(obj.capsLeft / 4);
+  obj.capsLeft -= Math.floor(obj.capsLeft / 4) * 4 - Math.floor(obj.capsLeft / 4);
+  return obj;
 };
 
-const capsForBottles = caps => {
-  if (caps >= 4) {
-    const freeBottlesVsCaps = Math.floor(caps / 4)
-    const leftCaps = caps % 4;
-    return freeBottlesVsCaps + capsForBottles(freeBottlesVsCaps + leftCaps);
+// a function to be call every time we have spare empty bottles to trade for a new bottle;
+const bottlesForBottles = obj => {
+  obj.totalBottles += Math.floor(obj.emptyBottles / 2);
+  obj.capsLeft += Math.floor(obj.emptyBottles / 2);
+  obj.emptyBottles -= Math.floor(obj.emptyBottles / 2) * 2 - Math.floor(obj.emptyBottles / 2);
+  return obj;
+};
+
+const totalBottles = (investment, output = {}) => {
+  // if it is the first time we run our fc, we need to define the output object
+  if (investment && output.totalBottles === undefined) {
+    output.totalBottles = Math.floor(investment / 2);
+    output.capsLeft = output.totalBottles;
+    output.emptyBottles = output.totalBottles;
   }
-  return 0;
-};
-
-const bottlesForBottles = bottles => {
-  if (bottles >= 2) {
-    const freeBottlesVsBottles = Math.floor(bottles / 2);
-    const leftBottles = bottles % 2;
-    return freeBottlesVsBottles + bottlesForBottles(freeBottlesVsBottles + leftBottles);
+  // base case: if I can't trade caps or bottles for new bottles
+  if (output.capsLeft < 4 && output.emptyBottles < 2) {
+    return output.totalBottles;
   }
-  return 0;
+  // recursive case: if I can trade either caps or bottles for new bottles:
+
+  if (output.capsLeft >= 4) {
+    capsForBottles(output);
+  }
+
+  if (output.emptyBottles >= 2) {
+    bottlesForBottles(output);
+  }
+
+  if (output.capsLeft >= 4 || output.emptyBottles >= 2) {
+    totalBottles(null, output);
+  }
+
+  return output.totalBottles;
+
 };
-
-console.log(totalBottles(10)); // =>	15
-// totalBottles(20); // =>	35
-// totalBottles(30); // =>	55
-// totalBottles(40); // =>	75
-// console.log("result:", bottlesForBottles(10)); // => min 5
-// console.log("result:", capsForBottles(10)); // => min 2
-
-
 
 module.exports = { totalBottles };
