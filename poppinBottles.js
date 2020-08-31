@@ -1,5 +1,3 @@
-// 120 min so far
-
 const investment = process.argv[2];
 const { capsForBottles } = require('./capsForBottles');
 const { bottlesForBottles } = require('./bottlesForBottles');
